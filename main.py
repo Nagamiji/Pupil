@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS  # Import the CORS extension
 import torch
 import os
@@ -148,6 +148,11 @@ def recognize_character():
     except Exception as e:
         print(f"Error in recognize_character: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
 
 if __name__ == "__main__":
     # Load the models before starting the server
