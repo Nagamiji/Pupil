@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pupil - Learn Khmer Writing</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Fredoka:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #1E40AF 0%, #DC2626 50%, #1E40AF 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .bg-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            width: 20px;
+            height: 20px;
+            background: #FDE047;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        .star:nth-child(2) { top: 15%; left: 20%; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 25%; right: 15%; animation-delay: 1s; }
+        .star:nth-child(4) { bottom: 30%; left: 10%; animation-delay: 1.5s; }
+        .star:nth-child(5) { bottom: 20%; right: 25%; animation-delay: 2s; }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .main-container {
+             margin: auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            border: 3px solid #FDE047;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .app-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #DC2626, #1E40AF, #DC2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #1E40AF;
+            font-weight: 500;
+        }
+        
+        .controls-section {
+            background: linear-gradient(135deg, #FEF3C7, #FDE047);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #F59E0B;
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .control-label {
+            font-weight: 600;
+            color: #92400E;
+            font-size: 1rem;
+        }
+        
+        select, input[type="range"] {
+            padding: 10px;
+            border: 2px solid #F59E0B;
+            border-radius: 15px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input[type="range"]:focus {
+            outline: none;
+            border-color: #DC2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E5E7EB;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .color-btn.active {
+            border-color: #FDE047;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(253, 224, 71, 0.6);
+        }
+        
+        .color-btn:before {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .color-btn.active:before {
+            opacity: 1;
+        }
+        
+        .btn-magic {
+            background: linear-gradient(135deg, #7C3AED, #A855F7);
+            color: white;
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-magic:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.6);
+        }
+        
+        .btn-magic:before {
+            content: '✨';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 20px;
+            opacity: 0;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+            50% { opacity: 1; transform: translate(40px, 40px) rotate(180deg); }
+        }
+        
+        .hint-panel {
+            background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
+            border: 3px solid #7C3AED;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hint-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .hint-item {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #A855F7;
+            min-width: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .hint-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3);
+        }
+        
+        .hint-character {
+            font-size: 2rem;
+            color: #7C3AED;
+            font-weight: bold;
+        }
+        
+        .hint-label {
+            font-size: 0.9rem;
+            color: #6B7280;
+            margin-top: 5px;
+        }
+        
+        .drawing-guide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            z-index: 1000;
+            pointer-events: none;
+            animation: celebrate 2s ease-out forwards;
+        }
+        
+        @keyframes celebrate {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .sound-btn {
+            background: linear-gradient(135deg, #10B981, #34D399);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+        
+        .sound-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: width 0.6s, height 0.6s, top 0.6s, left 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        
+        .btn:hover:before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1E40AF, #3B82F6);
+            color: white;
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.6);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #DC2626, #EF4444);
+            color: white;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.6);
+        }
+        
+        .btn-accent {
+            background: linear-gradient(135deg, #F59E0B, #FDE047);
+            color: #92400E;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.6);
+        }
+        
+        .canvas-container {
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid #1E40AF;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .canvas-container:before {
+            content: '✏️ Draw here! ✏️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #E5E7EB;
+            pointer-events: none;
+            z-index: 0;
+            opacity: var(--placeholder-opacity, 0.5);
+        }
+        
+        canvas {
+            border-radius: 15px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 3px solid #E5E7EB;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .result-loading {
+            border-color: #F59E0B;
+            background: linear-gradient(135deg, #FEF3C7, #FDE047);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .result-success {
+            border-color: #10B981;
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+        }
+        
+        .result-error {
+            border-color: #DC2626;
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .result-detail {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #F59E0B;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .mascot {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+            z-index: 2;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FDE047;
+            animation: confetti-fall 3s ease-in-out infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .thickness-display {
+            font-size: 1rem;
+            color: #92400E;
+            font-weight: 500;
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .app-title {
+                font-size: 2.5rem;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="bg-decoration star"></div>
+    <div class="bg-decoration star"></div>
+    <div class="bg-decoration star"></div>
+    <div class="bg-decoration star"></div>
+    <div class="bg-decoration star"></div>
+    
+    <div class="main-container">
+        <div class="header">
+            <h1 class="app-title">Pupil</h1>
+            <p class="subtitle">🇰🇭 រៀនសរសេរអក្សរខ្មែរ ជាមួយភាពរីករាយ! 📝</p>
+            <p style="font-size: 0.9rem; color: #6B7280; margin-top: 5px;">Learn Khmer Writing with Fun!</p>
+            <div class="mascot">🎓</div>
+        </div>
+        
+        <div class="controls-section">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label" for="mode">Learning Mode:</label>
+                    <select id="mode">
+                        <option value="digit">🔢 ខ្ទង់លេខខ្មែរ (Khmer Digits)</option>
+                        <option value="character">📝 អក្សរខ្មែរ (Khmer Characters)</option>
+                        <option value="words">📖 ពាក្យខ្មែរ (Khmer Words)</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">🎨 Choose Pen Color:</label>
+                    <div class="color-picker">
+                        <button class="color-btn active" data-color="#1E40AF" style="background: #1E40AF;" title="Blue - ពណ៌ខៀវ"></button>
+                        <button class="color-btn" data-color="#DC2626" style="background: #DC2626;" title="Red - ពណ៌ក្រហម"></button>
+                        <button class="color-btn" data-color="#059669" style="background: #059669;" title="Green - ពណ៌បៃតង"></button>
+                        <button class="color-btn" data-color="#7C3AED" style="background: #7C3AED;" title="Purple - ពណ៌ម្វង"></button>
+                        <button class="color-btn" data-color="#EA580C" style="background: #EA580C;" title="Orange - ពណ៌ទឹកក្រូច"></button>
+                        <button class="color-btn" data-color="#BE185D" style="background: #BE185D;" title="Pink - ពណ៌ផ្កាឈូក"></button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="thickness">Pen Thickness:</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="range" id="thickness" min="5" max="50" value="27" style="flex: 1;">
+                        <div class="thickness-display" id="thicknessDisplay">27px</div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="undo()">
+                        <span>↶ មិនធ្វើ</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="redo()">
+                        <span>↷ ធ្វើឡើង</span>
+                    </button>
+                    <button class="btn btn-accent" onclick="clearCanvas()">
+                        <span>🗑️ លុប</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="recognize()">
+                        <span>🔍 ស្គាល់</span>
+                    </button>
+                    <button class="btn btn-magic" onclick="showHint()">
+                        <span>💡 ជំនួយ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="canvas" width="800" height="500"></canvas>
+            <canvas id="guideCanvas" class="drawing-guide" width="800" height="500"></canvas>
+        </div>
+        
+        <div id="hintPanel" class="hint-panel">
+            <h3 style="color: #7C3AED; margin-bottom: 10px;">🎯 Try Drawing These! ព្យាយាមគូរទាំងនេះ!</h3>
+            <div class="hint-content" id="hintContent"></div>
+        </div>
+        
+        <div id="result" class="result-section">
+            <div class="result-content">
+                <p style="color: #6B7280; font-size: 1.2rem;">
+                    គូរអ្វីមួយ ហើយចុច "ស្គាល់" ដើម្បីមើលអាថ៌កំបាំង! ✨
+                    <br><small>Draw something and click "Recognize" to see the magic!</small>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script>
+        const khmerData = {
+            digits: {
+                '០': { name: 'សូន្យ', sound: 'soon' },
+                '១': { name: 'មួយ', sound: 'muoy' },
+                '២': { name: 'ពីរ', sound: 'pii' },
+                '៣': { name: 'បី', sound: 'bey' },
+                '៤': { name: 'បួន', sound: 'buon' },
+                '៥': { name: 'ប្រាំ', sound: 'pram' },
+                '៦': { name: 'ប្រាំមួយ', sound: 'pram-muoy' },
+                '៧': { name: 'ប្រាំពីរ', sound: 'pram-pii' },
+                'ៈ': { name: 'ប្រាំបី', sound: 'pram-bey' },
+                '៉': { name: 'ប្រាំបួន', sound: 'pram-buon' }
+            },
+            characters: {
+                'ក': { name: 'កគា', sound: 'ko-kea' },
+                'ខ': { name: 'ខខា', sound: 'kho-khaa' },
+                'គ': { name: 'គគា', sound: 'ko-kea' },
+                'ឃ': { name: 'ឃឃា', sound: 'kho-khaa' },
+                'ង': { name: 'ងង៉ា', sound: 'ngo-ngaa' },
+                'ច': { name: 'ចញ', sound: 'cho-chaa' },
+                'ឆ': { name: 'ឆឆ', sound: 'chho-chhaa' },
+                'ជ': { name: 'ជជា', sound: 'cho-chaa' },
+                'ញ': { name: 'ញញ៉ា', sound: 'nyo-njaa' },
+                'ដ': { name: 'ដដា', sound: 'do-daa' }
+            },
+            words: {
+                'មាន់': { name: 'មាន់', sound: 'moan', meaning: 'chicken' },
+                'ឆ្មា': { name: 'ឆ្មា', sound: 'chmaa', meaning: 'cat' },
+                'ចាន': { name: 'ចាន', sound: 'chaan', meaning: 'plate' },
+                'ផ្កា': { name: 'ផ្កា', sound: 'pkaa', meaning: 'flower' },
+                'ទឹក': { name: 'ទឹក', sound: 'tuk', meaning: 'water' },
+                'បាយ': { name: 'បាយ', sound: 'baay', meaning: 'rice' },
+                'សៀវភៅ': { name: 'សៀវភៅ', sound: 'siev-pov', meaning: 'book' },
+                'គ្រូ': { name: 'គ្រូ', sound: 'kruu', meaning: 'teacher' }
+            }
+        };
+
+        const canvas = new fabric.Canvas('canvas', {
+            isDrawingMode: true,
+            freeDrawingBrush: {
+                width: 27, // Initial thickness set to 27px
+                color: '#1E40AF'
+            }
+        });
+
+        const guideCanvas = new fabric.Canvas('guideCanvas', {
+            selection: false,
+            interactive: false
+        });
+
+        let history = [];
+        let redoStack = [];
+        let isDrawing = false;
+        let currentHintMode = 'digit';
+
+        function initCanvas() {
+            canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
+            guideCanvas.setBackgroundColor('transparent', guideCanvas.renderAll.bind(guideCanvas));
+            const width = Math.min(800, window.innerWidth - 100);
+            const height = Math.min(500, window.innerHeight * 0.4);
+            canvas.setDimensions({ width, height });
+            guideCanvas.setDimensions({ width, height });
+            // Reapply brush settings after resize
+            canvas.freeDrawingBrush.width = parseInt(document.getElementById('thickness').value);
+            canvas.freeDrawingBrush.color = canvas.freeDrawingBrush.color || '#1E40AF';
+            canvas.renderAll();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Color picker
+            const colorButtons = document.querySelectorAll('.color-btn');
+            colorButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    colorButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    canvas.freeDrawingBrush.color = this.dataset.color;
+                    playClickSound();
+                });
+            });
+
+            // Thickness control
+            const thicknessSlider = document.getElementById('thickness');
+            const thicknessDisplay = document.getElementById('thicknessDisplay');
+            thicknessSlider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                canvas.freeDrawingBrush.width = value;
+                thicknessDisplay.textContent = `${value}px`;
+                playClickSound();
+            });
+        });
+
+        function showHint() {
+            const mode = document.getElementById('mode').value;
+            const hintPanel = document.getElementById('hintPanel');
+            const hintContent = document.getElementById('hintContent');
+            
+            currentHintMode = mode;
+            hintContent.innerHTML = '';
+            
+            const data = mode === 'digit' ? khmerData.digits :
+                        mode === 'character' ? khmerData.characters :
+                        khmerData.words;
+            
+            const items = Object.keys(data);
+            const randomItems = items.sort(() => 0.5 - Math.random()).slice(0, 6);
+            
+            randomItems.forEach(key => {
+                const item = data[key];
+                const hintItem = document.createElement('div');
+                hintItem.className = 'hint-item';
+                hintItem.onclick = () => drawGuide(key);
+                
+                hintItem.innerHTML = `
+                    <div class="hint-character">${key}</div>
+                    <div class="hint-label">${item.name}</div>
+                    <button class="sound-btn" onclick="event.stopPropagation(); playSound('${item.sound}')" title="Listen">🔊</button>
+                `;
+                hintContent.appendChild(hintItem);
+            });
+            
+            hintPanel.style.display = hintPanel.style.display === 'block' ? 'none' : 'block';
+            playClickSound();
+        }
+
+        function drawGuide(character) {
+            guideCanvas.clear();
+            
+            const text = new fabric.Text(character, {
+                left: guideCanvas.width / 2,
+                top: guideCanvas.height / 2,
+                originX: 'center',
+                originY: 'center',
+                fontSize: Math.min(guideCanvas.width, guideCanvas.height) / 3,
+                fill: 'rgba(124, 58, 237, 0.2)',
+                fontFamily: 'Arial',
+                selectable: false,
+                evented: false
+            });
+            
+            guideCanvas.add(text);
+            guideCanvas.renderAll();
+            
+            setTimeout(() => {
+                guideCanvas.clear();
+                guideCanvas.renderAll();
+            }, 10000);
+        }
+
+        function playSound(sound) {
+            showCelebration(`🔊 ${sound}`);
+        }
+
+        function showCelebration(text) {
+            const celebration = document.createElement('div');
+            celebration.className = 'celebration';
+            celebration.textContent = text;
+            document.body.appendChild(celebration);
+            
+            setTimeout(() => {
+                celebration.remove();
+            }, 2000);
+        }
+
+        function saveState() {
+            if (!isDrawing) {
+                history.push(JSON.stringify(canvas));
+                redoStack = [];
+                if (history.length > 20) {
+                    history.shift();
+                }
+            }
+        }
+
+        function undo() {
+            if (history.length > 0) {
+                redoStack.push(JSON.stringify(canvas));
+                const state = history.pop();
+                canvas.loadFromJSON(state, () => {
+                    canvas.renderAll();
+                    playClickSound();
+                });
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                history.push(JSON.stringify(canvas));
+                const state = redoStack.pop();
+                canvas.loadFromJSON(state, () => {
+                    canvas.renderAll();
+                    playClickSound();
+                });
+            }
+        }
+
+        canvas.on('path:created', () => {
+            isDrawing = false;
+            saveState();
+            hideCanvas();
+        });
+
+        function hideCanvas() {
+            document.querySelector('.canvas-container').style.setProperty('--placeholder-opacity', '0');
+        }
+
+        canvas.on('mousedown', () => {
+            isDrawing = true;
+            hideCanvas();
+        });
+
+        function clearCanvas() {
+            const container = document.querySelector('.canvas-container');
+            container.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                canvas.clear();
+                canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
+                guideCanvas.clear();
+                document.getElementById('result').className = 'result-section';
+                document.getElementById('result').innerHTML = `
+                    <div class="result-content">
+                        <p style="color: #6B7280; font-size: 1.2rem;">
+                            គូរអ្វីមួយ ហើយចុច "ស្គាល់" ដើម្បីមើលអាថ៌កំបាំង! ✨
+                            <br><small>Draw something and click "Recognize" to see the magic!</small>
+                        </p>
+                    </div>
+                `;
+                history = [];
+                redoStack = [];
+                container.style.transform = 'scale(1)';
+                container.style.setProperty('--placeholder-opacity', '0.5');
+                playClickSound();
+            }, 150);
+        }
+
+        function playClickSound() {
+            const btn = event.target.closest('.btn');
+            if (btn) {
+                btn.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 100);
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#FDE047', '#DC2626', '#1E40AF', '#10B981'];
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
+        }
+
+        async function recognize() {
+            const mode = document.getElementById('mode').value;
+            const objects = canvas.getObjects().map(obj => {
+                if (obj.type === 'path') {
+                    return {
+                        type: 'path',
+                        path: obj.path.map(point => ({
+                            type: point[0],
+                            coords: point.slice(1)
+                        }))
+                    };
+                }
+                return null;
+            }).filter(obj => obj !== null);
+
+            const canvasData = { objects };
+
+            if (objects.length === 0) {
+                showResult('សូមគូរអ្វីមួយលើក្រដាសជាមុនសិន! 🎨<br><small>Please draw something on the canvas first!</small>', 'error');
+                return;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result-section result-loading';
+            resultDiv.innerHTML = `
+                <div class="result-content">
+                    <div class="loading-spinner"></div>
+                    <p style="color: #92400E; font-size: 1.2rem; font-weight: 600;">
+                        កំពុងវិភាគសរសេរស្រស់ស្អាតរបស់អ្នក... ✨
+                        <br><small>Analyzing your beautiful writing...</small>
+                    </p>
+                </div>
+            `;
+
+            try {
+                let url;
+                if (mode === 'digit') {
+                    url = 'http://127.0.0.1:8000/recognize-digit';
+                } else {
+                    url = 'http://127.0.0.1:8000/recognize-character';
+                }
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(canvasData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+    let content = '';
+    let writingCorrect = data.writing_quality && data.writing_quality.toLowerCase() === 'correct';
+
+    if (mode === 'digit') {
+        const digitInfo = khmerData.digits[data.predicted_digit];
+
+        if (writingCorrect) {
+            content = `
+                <div class="result-title" style="color: #1E40AF;">
+                    🎯 លេខដែលបានព្យាករណ៍: <span style="font-size: 3rem;">${data.predicted_digit}</span>
+                    <br><small>Predicted Digit: ${data.predicted_digit}</small>
+                </div>
+                <div class="result-detail" style="color: #059669;">
+                    📖 ឈ្មោះ: ${digitInfo ? digitInfo.name : 'Unknown'} 
+                    <button class="sound-btn" onclick="playSound('${digitInfo ? digitInfo.sound : 'unknown'}')" title="Listen">🔊</button>
+                    <br>✨ ទិសដៅក្នុងការសរសេរ: ${data.writing_quality}
+                    <br><small>Writing Direction: ${data.writing_quality}</small>
+                </div>
+            `;
+        } else {
+            content = `
+                <div class="result-title" style="color: #DC2626;">
+                    😕 ទិសដៅសរសេរមិនត្រឹមត្រូវទេ!
+                </div>
+                <div class="result-detail" style="color: #B91C1C;">
+                    ❌ ទិសដៅសរសេរមិនត្រឹមត្រូវ: ${data.writing_quality}
+                    <br><small>Writing Direction: ${data.writing_quality}</small>
+                </div>
+            `;
+        }
+
+        showResult(content, writingCorrect ? 'success' : 'error');
+
+        if (writingCorrect) {
+            createConfetti();
+        }
+
+    } else if (mode === 'character') {
+        const charInfo = khmerData.characters[data.predicted_character];
+
+        content = `
+            <div class="result-title" style="color: #1E40AF;">
+                📝 អក្សរដែលបានព្យាករណ៍: <span style="font-size: 3rem;">${data.predicted_character}</span>
+                <br><small>Predicted Character: ${data.predicted_character}</small>
+            </div>
+            <div class="result-detail" style="color: #059669;">
+                📖 ឈ្មោះ: ${charInfo ? charInfo.name : 'Unknown'} 
+                <button class="sound-btn" onclick="playSound('${charInfo ? charInfo.sound : 'unknown'}')" title="Listen">🔊</button>
+                <br>✨ ទិសដៅក្នុងការសរសេរ: ${data.writing_quality}
+                <br><small>Writing Quality: ${data.writing_quality}</small>
+            </div>
+        `;
+
+        showResult(content, 'success');
+
+    } else if (mode === 'words') {
+        const wordInfo = khmerData.words[data.predicted_word];
+
+        content = `
+            <div class="result-title" style="color: #1E40AF;">
+                📖 ពាក្យដែលបានព្យាករណ៍: <span style="font-size: 2.5rem;">${data.predicted_word}</span>
+                <br><small>Predicted Word: ${data.predicted_word}</small>
+            </div>
+            <div class="result-detail" style="color: #059669;">
+                📖 អត្ថន័យ: ${wordInfo ? wordInfo.meaning : 'Unknown'}
+                <button class="sound-btn" onclick="playSound('${wordInfo ? wordInfo.sound : 'unknown'}')" title="Listen">🔊</button>
+                <br>✨ គុណភាពសរសេរ: ${data.writing_quality}
+                <br><small>Writing Quality: ${data.writing_quality}</small>
+            </div>
+        `;
+
+        showResult(content, 'success');
+    }
+
+} else {
+    showResult(`❌ Error: ${data.detail || 'Recognition failed.'}`, 'error');
+}
+
+
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showResult(`
+                    <div class="result-title" style="color: #DC2626;">
+                        😅 Oops! Something went wrong
+                    </div>
+                    <div class="result-detail" style="color: #991B1B;">
+                        ${error.message}
+                    </div>
+                    <p style="color: #6B7280; margin-top: 10px;">
+                        Try drawing clearer or check your connection! 🔌
+                    </p>
+                `, 'error');
+            }
+        }
+
+        function showResult(content, type) {
+            const resultDiv = document.getElementById('result');
+            const className = type === 'success' ? 'result-success' : 
+                            type === 'error' ? 'result-error' : 'result-loading';
+            
+            resultDiv.style.transform = 'scale(0.9)';
+            resultDiv.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                resultDiv.className = `result-section ${className}`;
+                resultDiv.innerHTML = `<div class="result-content">${content}</div>`;
+                resultDiv.style.transform = 'scale(1)';
+                resultDiv.style.opacity = '1';
+            }, 200);
+        }
+
+        window.addEventListener('load', () => {
+            initCanvas();
+            window.addEventListener('resize', initCanvas);
+        });
+
+        document.addEventListener('click', playClickSound);
+    </script>
+</body>
+</html>
